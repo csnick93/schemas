@@ -1,0 +1,245 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "imageFolder": { "type": "string" },
+    "address": { "$ref": "#/definitions/Address" },
+    "phone": { "type": "string" },
+    "pricing": { "$ref": "#/definitions/Pricing" },
+    "openingHours": { "$ref": "#/definitions/OpeningHours" },
+    "info": { "anyOf": [
+      {"$ref": "#/definitions/LocalizedString" },
+      { "type": "null" }
+    ]},
+    "whatsapp": { "type": ["string", "null"] },
+    "website": { "type": ["string", "null"] },
+    "app_link_android": { "type": ["string", "null"] },
+    "app_link_ios": { "type": ["string", "null"] },
+    "reviewSummary": { "$ref": "#/definitions/ReviewSummary" }
+  },
+  "required": [
+    "id",
+    "name",
+    "imageFolder",
+    "address",
+    "phone",
+    "pricing",
+    "openingHours",
+    "info",
+    "whatsapp",
+    "website",
+    "app_link_android",
+    "app_link_ios",
+    "reviewSummary"
+  ],
+  "definitions": {
+    "LocalizedString": {
+      "type": "object",
+      "properties": {
+        "german": { "type": "string" },
+        "english": { "type": "string" }
+      },
+      "required": ["german", "english"]
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": {"type": "string"},
+        "houseNumber": {"type": "integer"},
+        "houseNumberSuffix": {"type": "string"},
+        "zip": {"type": "integer"},
+        "city": {"type": "string"},
+        "gps": {"$ref": "#/definitions/GPS"}
+      },
+      "required": ["street", "houseNumber", "zip", "city", "gps"]
+    },
+    "GPS": {
+      "type": "object",
+      "properties": {
+        "lat": {"type": "number"},
+        "lng": {"type": "number"}
+      },
+      "required": ["lat", "lng"]
+    },
+    "Name": {
+      "type": "object",
+      "properties": {
+        "german": {"type": "string"},
+        "english": {"type": "string"}
+      },
+      "required": ["german", "english"]
+    },
+    "Price": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"$ref": "#/definitions/Name"},
+        "price": {"type": "number"},
+        "exactPrice": {"type": "boolean"}
+      },
+      "required": ["price", "exactPrice"]
+    },
+    "Service": {
+      "type": "object",
+      "properties": {
+        "serviceName": {"$ref": "#/definitions/Name"},
+        "prices": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Price"}
+        }
+      },
+      "required": ["serviceName", "prices"]
+    },
+    "ServiceCategory": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "services": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Service"}
+        }
+      }
+    },
+    "Subcategory": {
+      "type": "object",
+      "properties": {
+          "haircut": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "styling": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "student": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "cosmetics": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "color": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "care": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "beard": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "color": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "bride": {
+            "$ref": "#/definitions/ServiceCategory"
+          },
+          "extras": {
+            "$ref": "#/definitions/ServiceCategory"
+          }
+      },
+      "required": ["haircut"]
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "subcategories": {
+          "type": "object",
+          "items": {"$ref": "#/definitions/Subcategory"}
+        }
+      }
+    },
+    "Pricing": {
+      "type": "object",
+      "properties": {
+        "female": {"$ref": "#/definitions/Category"},
+        "male": {"$ref": "#/definitions/Category"},
+        "kids": {"$ref": "#/definitions/Category"}
+      }
+    },
+    "Time": {
+      "type": "object",
+      "properties": {
+        "hour": {"type": "integer"},
+        "minute": {"type": "integer"}
+      },
+      "required": ["hour", "minute"]
+    },
+    "OpeningHour": {
+      "type": "object",
+      "properties": {
+        "start": {"$ref": "#/definitions/Time"},
+        "end": {"$ref": "#/definitions/Time"}
+      },
+      "required": ["start", "end"]
+    },
+    "OpeningHours": {
+      "type": "object",
+      "properties": {
+        "monday": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        },
+        "tuesday": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        },
+        "wednesday": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        },
+        "thursday":
+        {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        },
+        "friday": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        },
+        "saturday": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        },
+        "sunday": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/OpeningHour"}
+        }
+      },
+      "required": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+    },
+    "Review": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "authorName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "text": { "$ref": "#/definitions/LocalizedString" }
+      },
+      "required": ["rating", "text", "authorName"]
+    },
+    "ReviewSummary": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "numReviews": {
+          "type": "number"
+        },
+        "reviews": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/Review"}
+        }
+      },
+      "required": ["rating", "numReviews", "reviews"]
+    }
+  }
+}
